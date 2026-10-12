@@ -59,6 +59,13 @@ search for the latest React release
 
 Type `@` + `Tab` to reference files, attach images with `/img`, and run `/help` anytime.
 
+## Updating
+
+```bash
+npm i -g niyusha@latest     # or: npm update -g niyusha
+niyusha -v                  # confirm the new version
+```
+
 ## Built-in tools (and yes, there are a lot)
 
 Niyusha comes with **20+ tools** out of the box — no plugins to install:
