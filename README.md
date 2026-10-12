@@ -6,12 +6,17 @@ Staged edits with diff review · a permissioned real shell · web search · auto
 [![npm version](https://img.shields.io/npm/v/niyusha.svg)](https://www.npmjs.com/package/niyusha)
 [![license](https://img.shields.io/npm/l/niyusha.svg)](https://www.npmjs.com/package/niyusha)
 
+## Install & update
+
 ```bash
-npm i -g niyusha
-niyusha
+npm i -g niyusha          # install
+niyusha                   # run it inside any project
+
+npm i -g niyusha@latest   # update (or: npm update -g niyusha)
+niyusha -v                # confirm the version
 ```
 
-That's it. No build step, no daemon, no config files to write — it starts in milliseconds.
+No build step, no daemon, no config files to write — it starts in milliseconds.
 
 ---
 
@@ -21,7 +26,10 @@ Most tooling today wants a framework, a compiler, and a hundred packages. Niyush
 
 - **Ridiculously light** — pure Node.js, **zero runtime dependencies**, tiny install footprint.
 - **Instant** — no bundling, no service to boot; run it and you're working.
+- **Lean by design** — a compact, hand-tuned system prompt + tools, protected by a **token-budget guard** so the per-request overhead can't quietly creep up.
 - **Safe by default** — every file change is **staged first**; you approve a colored diff before anything touches disk.
+- **Truly reversible** — `/undo` reverts applied files *and* real shell side effects, across restarts.
+- **Delegates** — read-only **subagents** for broad exploration, or `build` subagents whose edits land in the same review queue.
 - **Real, not sandboxed theatre** — it actually reads, edits, and runs commands in your workspace.
 - **Local & private** — your code, sessions, and history stay on your machine (`~/.niyusha/`).
 
@@ -59,13 +67,6 @@ search for the latest React release
 
 Type `@` + `Tab` to reference files, attach images with `/img`, and run `/help` anytime.
 
-## Updating
-
-```bash
-npm i -g niyusha@latest     # or: npm update -g niyusha
-niyusha -v                  # confirm the new version
-```
-
 ## Built-in tools (and yes, there are a lot)
 
 Niyusha comes with **20+ tools** out of the box — no plugins to install:
@@ -75,7 +76,7 @@ Niyusha comes with **20+ tools** out of the box — no plugins to install:
 - **Execute** — `run_command` (real shell, permissioned) · `run_code`
 - **Research** — `web_search` (works with no extra key)
 - **Plan & remember** — `set_todos` · `read_note` / `write_note` / `clear_note`
-- **Extend** — `use_skill` · `task` (delegate to a **read-only subagent**) · `mcp_list` / `mcp_call` (connect any **MCP server**)
+- **Extend** — `use_skill` · `task` (delegate to a **subagent**: `explore` read-only / `build` that stages edits for review) · `mcp_list` / `mcp_call` (connect any **MCP server**)
 
 …plus **skills**, **project rules** (`AGENTS.md`), **session save/load**, `@file` references, image attach, `/init`, `/redo`, split diff, themes and a full command palette. The list keeps growing.
 
