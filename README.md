@@ -80,6 +80,20 @@ Niyusha comes with **20+ tools** out of the box — no plugins to install:
 
 …plus **skills**, **project rules** (`AGENTS.md`), **session save/load**, `@file` references, image attach, `/init`, `/redo`, split diff, themes and a full command palette. The list keeps growing.
 
+## Signature kits (khas Niyusha)
+
+Start a brand-new site in Niyusha's own look — one command:
+
+```bash
+/kit web my-site     # scaffold a new site from the Niyusha web kit (staged for review)
+```
+
+- **Zero-dep, original** design tokens (color, type, motion) applied consistently.
+- The AI **composes** fresh pages from the kit — not copied templates.
+- Loaded **on demand** (no cost when you're not building a site); everything is **staged**.
+- Prefer a bare start? Just say it — the kit is a default, never a lock-in.
+- Optional, off by default: `/credit on` adds a small "Made with NTVGraph × Niyusha" footer.
+
 ## Safety you can see
 
 1. **Stage first** — writes/edits/deletes land in a virtual overlay; nothing is real until you `/apply`.
