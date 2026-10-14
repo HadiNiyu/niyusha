@@ -1,7 +1,7 @@
 # Niyusha
 
 **A featherweight AI coding agent that lives in your terminal.**
-Staged edits with diff review · a permissioned real shell · web search · autonomous mode · sessions · subagents · MCP — in **~400 KB with zero runtime dependencies**.
+Staged edits with diff review · a permissioned real shell · web search · autonomous mode · sessions · subagents · MCP — in **~500 KB unpacked (~150 KB download) with zero runtime dependencies**.
 
 [![npm version](https://img.shields.io/npm/v/niyusha.svg)](https://www.npmjs.com/package/niyusha)
 [![license](https://img.shields.io/npm/l/niyusha.svg)](https://www.npmjs.com/package/niyusha)
