@@ -78,8 +78,6 @@ Niyusha comes with **20+ tools** out of the box — no plugins to install:
 - **Plan & remember** — `set_todos` · `read_note` / `write_note` / `clear_note`
 - **Extend** — `use_skill` · `task` (delegate to a **subagent**: `explore` read-only / `build` that stages edits for review) · `mcp_list` / `mcp_call` (connect any **MCP server**)
 
-…plus **skills**, **project rules** (`AGENTS.md`), **session save/load**, `@file` references, image attach, `/init`, `/redo`, split diff, themes and a full command palette. The list keeps growing.
-
 ## Signature kits (khas Niyusha)
 
 Start a brand-new site in Niyusha's own look — one command:
@@ -94,6 +92,38 @@ Start a brand-new site in Niyusha's own look — one command:
 - Prefer a bare start? Just say it — the kit is a default, never a lock-in.
 - Optional, off by default: `/credit on` adds a small "Made with NTVGraph × Niyusha" footer.
 
+## Conditional skills (khas Niyusha)
+
+Niyusha ships a registry of specialist **skills** (rules per task). A compact
+index (`id — deskripsi`) is shown to the AI, which then picks and loads only the
+relevant skill(s) via `use_skill` — **model-driven**, tanpa pencocokan kata kunci
+yang rapuh.
+
+- **Model decides** — AI membaca index lalu memuat skill yang cocok sebelum bekerja (semantik, bahasa apa pun). `/skill auto off` menyembunyikan index.
+- **Explicit** — `use_skill '<id>'` (AI) atau `/skill use <id>` (kamu); `use_skill` tanpa nama menampilkan katalog.
+- **Control & transparency** — `/skill ls` (daftar + status index) · `/skill auto on|off` · `/skill off <id>` / `/skill on <id>` · `/skill log` (apa yang dimuat, ~token).
+- **Extensible** — cukup buat folder `bin/skills/<id>/` berisi `skill.json` (metadata: description, priority, token_budget) + `rules.md`; tanpa ubah kode.
+
+## Common commands
+
+| Command | Purpose |
+| --- | --- |
+| `/provider` `/key` `/model` | Configure the AI provider (auto-loads models) |
+| `/diff` `/apply [n\|path]` `/reject` | Review and decide on the staging |
+| `/undo` `/redo` | Roll back — or re-apply — the last change |
+| `/auto [on\|off]` | Autonomous mode (auto-apply; dangerous actions still ask) |
+| `/plan <task>` | Plan first, no file changes |
+| `/init` | Generate an `AGENTS.md` for the project |
+| `/mcp` | Manage MCP servers |
+| `/rule` | Set project/session rules |
+| `/skill [save\|use\|ls\|rm\|auto\|on\|off\|log]` | Conditional skills — registry, model-driven load, toggle, log |
+| `/sessions` `/save` `/load` | Sessions (portable JSON export/import) |
+| `/copy` `/find` `/theme` | Clipboard · chat search · themes |
+| `/kit [web] <name>` | Scaffold a **new** site in Niyusha's signature style (staged for review) |
+| `/credit [on\|off]` | Toggle a small "Made with NTVGraph × Niyusha" footer on kit sites (default off) |
+
+See `/help` for the full list.
+
 ## Safety you can see
 
 1. **Stage first** — writes/edits/deletes land in a virtual overlay; nothing is real until you `/apply`.
@@ -106,6 +136,35 @@ Start a brand-new site in Niyusha's own look — one command:
 - Save and resume full conversations **with working state** — todos, staging, notes, background jobs.
 - Export/import sessions as portable JSON, even **across different projects**.
 - Talks like you do: it replies in **your language**, whatever that is.
+
+## Configuration & storage
+
+All state is local, in `~/.niyusha/`:
+
+- `config.json` — provider, API key, permissions, web search
+- `state.json` — global history, skills, rules
+- `ws_<key>.json` — per-workspace history, todos, sessions
+- `undo/` — snapshots used by `/undo` across restarts
+- `scratch/` — per-workspace notepad (secret-safe)
+
+Do not commit `~/.niyusha` (it contains your API key).
+
+## Development
+
+```bash
+node bin/niyusha.js      # run the TUI from source
+```
+
+This package is the **TUI** product (the `bin/` folder). Zero runtime dependencies.
+
+### Publishing a new version
+
+```bash
+# 1) bump "version" in package.json
+npm publish --dry-run    # inspect the tarball (only bin/ + README + LICENSE)
+npm publish              # requires `npm login`
+npm view niyusha version # confirm it's live
+```
 
 ## Links
 
