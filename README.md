@@ -1,7 +1,7 @@
 # Niyusha
 
 **A featherweight AI coding agent that lives in your terminal.**
-Staged edits with diff review · a permissioned real shell · web search · autonomous mode · sessions · subagents · MCP — in **~500 KB unpacked (~150 KB download) with zero runtime dependencies**.
+Staged edits with diff review · a permissioned real shell · web search · autonomous mode · sessions · subagents · MCP — in **~500 KB unpacked (~160 KB download) with zero runtime dependencies**.
 
 [![npm version](https://img.shields.io/npm/v/niyusha.svg)](https://www.npmjs.com/package/niyusha)
 [![license](https://img.shields.io/npm/l/niyusha.svg)](https://www.npmjs.com/package/niyusha)
@@ -26,7 +26,7 @@ Most tooling today wants a framework, a compiler, and a hundred packages. Niyush
 
 - **Ridiculously light** — pure Node.js, **zero runtime dependencies**, tiny install footprint.
 - **Instant** — no bundling, no service to boot; run it and you're working.
-- **Lean by design** — a compact, hand-tuned system prompt + tools, protected by a **token-budget guard** so the per-request overhead can't quietly creep up.
+- **Lean by design** — a compact, hand-tuned system prompt + tools, protected by a **token-budget guard** so the per-request overhead can't quietly creep up. The in-app context meter shows **real provider token usage** (hybrid estimate when the provider doesn't report it).
 - **Safe by default** — every file change is **staged first**; you approve a colored diff before anything touches disk.
 - **Truly reversible** — `/undo` reverts applied files *and* real shell side effects, across restarts.
 - **Delegates** — read-only **subagents** for broad exploration, or `build` subagents whose edits land in the same review queue.
@@ -69,7 +69,7 @@ Type `@` + `Tab` to reference files, attach images with `/img`, and run `/help` 
 
 ## Built-in tools (and yes, there are a lot)
 
-Niyusha comes with **20+ tools** out of the box — no plugins to install:
+Niyusha comes with **22 tools** out of the box — no plugins to install:
 
 - **Files** — `read_file` · `write_file` · `edit_file` · `rename_file` · `delete_file` · `list_directory` · `create_directory`
 - **Search & explore** — `glob_files` · `grep_search` · `workspace_tree`
@@ -117,8 +117,11 @@ yang rapuh.
 | `/mcp` | Manage MCP servers |
 | `/rule` | Set project/session rules |
 | `/skill [save\|use\|ls\|rm\|auto\|on\|off\|log]` | Conditional skills — registry, model-driven load, toggle, log |
-| `/sessions` `/save` `/load` | Sessions (portable JSON export/import) |
+| `/sessions` `/save` `/load` `/new` `/resume` | Sessions — autosave, restore, fresh start, portable JSON export/import |
+| `/todo` | Task checklist, shown live in the sidebar |
+| `/compact` | Compress context to keep going on long chats |
 | `/copy` `/find` `/theme` | Clipboard · chat search · themes |
+| `/img` `/paste` | Attach an image · insert multi-line clipboard text |
 | `/kit [web] <name>` | Scaffold a **new** site in Niyusha's signature style (staged for review) |
 | `/credit [on\|off]` | Toggle a small "Made with NTVGraph × Niyusha" footer on kit sites (default off) |
 
