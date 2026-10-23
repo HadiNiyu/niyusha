@@ -1,7 +1,7 @@
 # Niyusha
 
 **A featherweight AI coding agent that lives in your terminal.**
-Staged edits with diff review · a permissioned real shell · web search · autonomous mode · sessions · subagents · MCP — in **~500 KB unpacked (~160 KB download) with zero runtime dependencies**.
+Staged edits with diff review · a permissioned real shell · web search · autonomous mode · sessions · subagents · MCP — in **~670 KB unpacked (~200 KB download) with zero runtime dependencies**.
 
 [![npm version](https://img.shields.io/npm/v/niyusha.svg)](https://www.npmjs.com/package/niyusha)
 [![license](https://img.shields.io/npm/l/niyusha.svg)](https://www.npmjs.com/package/niyusha)
@@ -69,14 +69,14 @@ Type `@` + `Tab` to reference files, attach images with `/img`, and run `/help` 
 
 ## Built-in tools (and yes, there are a lot)
 
-Niyusha comes with **22 tools** out of the box — no plugins to install:
+Niyusha comes with **24 tools** out of the box — no plugins to install:
 
 - **Files** — `read_file` · `write_file` · `edit_file` · `rename_file` · `delete_file` · `list_directory` · `create_directory`
 - **Search & explore** — `glob_files` · `grep_search` · `workspace_tree`
 - **Execute** — `run_command` (real shell, permissioned) · `run_code`
 - **Research** — `web_search` (works with no extra key)
-- **Plan & remember** — `set_todos` · `read_note` / `write_note` / `clear_note`
-- **Extend** — `use_skill` · `task` (delegate to a **subagent**: `explore` read-only / `build` that stages edits for review) · `mcp_list` / `mcp_call` (connect any **MCP server**)
+- **Plan & remember** — `set_todos` · `resolve_issue` · `read_note` / `write_note` / `clear_note`
+- **Extend** — `use_skill` · `save_skill` (distill a session into a reusable skill behind a diff review) · `task` (delegate to a **subagent**: `explore` read-only / `build` that stages edits for review) · `mcp_list` / `mcp_call` (connect any **MCP server**)
 
 ## Signature kits (khas Niyusha)
 
@@ -94,15 +94,38 @@ Start a brand-new site in Niyusha's own look — one command:
 
 ## Conditional skills (khas Niyusha)
 
-Niyusha ships a registry of specialist **skills** (rules per task). A compact
-index (`id — deskripsi`) is shown to the AI, which then picks and loads only the
-relevant skill(s) via `use_skill` — **model-driven**, tanpa pencocokan kata kunci
-yang rapuh.
+Niyusha ships **25 built-in specialist skills** — web, frontend, backend,
+database, debugging, refactor, test, security, deploy, code-review, mobile,
+packaging, ml-data, automation, performance, algorithm, ai-agent, ui-ux, devops,
+data-eng, documentation, game, embedded, research, and **simulation**.
+
+A compact index (`id — deskripsi`) is shown to the AI, which then picks and loads
+only the relevant skill(s) via `use_skill` — **model-driven**, tanpa pencocokan
+kata kunci yang rapuh.
 
 - **Model decides** — AI membaca index lalu memuat skill yang cocok sebelum bekerja (semantik, bahasa apa pun). `/skill auto off` menyembunyikan index.
 - **Explicit** — `use_skill '<id>'` (AI) atau `/skill use <id>` (kamu); `use_skill` tanpa nama menampilkan katalog.
 - **Control & transparency** — `/skill ls` (daftar + status index) · `/skill auto on|off` · `/skill off <id>` / `/skill on <id>` · `/skill log` (apa yang dimuat, ~token).
 - **Extensible** — cukup buat folder `bin/skills/<id>/` berisi `skill.json` (metadata: description, priority, token_budget) + `rules.md`; tanpa ubah kode.
+
+### Simulation: app, software & browser behavior
+`bin/sim.js` is a small **zero-dependency** behavioral harness — **not just for
+games**. It drives headless Chrome via CDP for web apps, SaaS/browser flows, UI
+regressions, and canvas games, plus ADB for Android apps.
+
+The `simulation` skill teaches a general, evidence-first loop: define a scenario
+→ launch/serve → send real input (`click`, `tap`, `key`, ADB) → observe (DOM,
+console, metrics, screenshot, logcat) → assert → cleanup. Use it to simulate the
+behavior of any target reachable from these surfaces, not only a game.
+
+```bash
+node bin/sim.js serve ./www --port 8765
+node bin/sim.js web http://127.0.0.1:8765 --viewport 430x880 \
+  --click "#start" --tap 215,700 --key Space \
+  --metrics ".overlay,canvas" --shot tmp/shot.png
+node bin/sim.js adb devices
+node bin/sim.js adb shot tmp/android.png
+```
 
 ## Common commands
 
@@ -120,7 +143,9 @@ yang rapuh.
 | `/sessions` `/save` `/load` `/new` `/resume` | Sessions — autosave, restore, fresh start, portable JSON export/import |
 | `/todo` | Task checklist, shown live in the sidebar |
 | `/compact` | Compress context to keep going on long chats |
+| `/usage` `/tokens` | Session token totals (input/output/total/requests) + live context meter |
 | `/copy` `/find` `/theme` | Clipboard · chat search · themes |
+| `/set icon <name>` | Chat/splash glyph: `spark` `star` `diamond` `hex` `orbit` `bolt` `dot` `none` |
 | `/img` `/paste` | Attach an image · insert multi-line clipboard text |
 | `/kit [web] <name>` | Scaffold a **new** site in Niyusha's signature style (staged for review) |
 | `/credit [on\|off]` | Toggle a small "Made with NTVGraph × Niyusha" footer on kit sites (default off) |
@@ -137,6 +162,7 @@ See `/help` for the full list.
 ## Sessions, memory & freedom
 
 - Save and resume full conversations **with working state** — todos, staging, notes, background jobs.
+- Track **cumulative session token usage** (`/usage` / `/tokens`, sidebar `Session`, footer `ses`); estimates are marked `≈`.
 - Export/import sessions as portable JSON, even **across different projects**.
 - Talks like you do: it replies in **your language**, whatever that is.
 
@@ -149,8 +175,6 @@ All state is local, in `~/.niyusha/`:
 - `ws_<key>.json` — per-workspace history, todos, sessions
 - `undo/` — snapshots used by `/undo` across restarts
 - `scratch/` — per-workspace notepad (secret-safe)
-
-Do not commit `~/.niyusha` (it contains your API key).
 
 ## Development
 
@@ -177,3 +201,31 @@ npm view niyusha version # confirm it's live
 ---
 
 *Small on disk. Serious about getting work done.*
+
+---
+
+## What's new in v0.2.9
+
+This one is about **seeing more and spending less**.
+
+**A sharper interface**
+- Redesigned reasoning panel that reads like a live thought stream instead of a box.
+- Tables that wrap cleanly instead of slicing words, with quieter borders and headers.
+- Cleaner user bubbles, a tighter input area, and a live context meter in the footer.
+- **Zen mode** — `/zen` (or `Ctrl+Z`) strips the chrome so only you and the work remain.
+
+**Token numbers you can trust**
+- `/usage` now separates **billed** tokens from **raw** provider counts, so the number you see matches the number you pay for.
+- Cache read/write tokens are tracked on every request.
+- Cost shows `n/a` when a provider has no published rate — no invented estimates.
+
+**Lean by default**
+- A context guard prunes stale tool output and compacts memory *before* the window overflows.
+- Compaction never splits a tool call from its result, so the history stays valid.
+- Long sessions keep going instead of stalling at the limit.
+
+**Undo that won't eat your disk**
+- Shell snapshots are **content-addressed**: each file version is stored once and reused, so a command only costs the bytes it actually changes.
+- Large files are skipped with an explicit **partial undo** notice, and restoring never deletes files Niyusha didn't create.
+- Undo history is isolated per workspace — switching projects can no longer erase another project's snapshots.
+- `/undo` and `/redo` also update the agent's context, so it never assumes a rolled-back edit is still live.
